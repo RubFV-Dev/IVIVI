@@ -1,0 +1,26 @@
+# --- Compilación ---
+build/
+cmake-build-*/
+cmake-build-debug/
+Makefile
+CMakeCache.txt
+*.cmake
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+
+# --- IDEs ---
+.idea/
+.vscode/
+*.user
+
+# --- Sistema ---
+.DS_Store
+Thumbs.db
+
+# --- CARPETA FANTASMA (Seguridad) ---
+# Ignoramos cualquier carpeta de videos que se pueda crear por error dentro del proyecto
+IVIVI_Videos/
+videos_locales/
