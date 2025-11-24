@@ -9,7 +9,9 @@ find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2 Multimedia)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
-qt_add_executable(appIVIVI src/main.cpp)
+qt_add_executable(appIVIVI src/main.cpp
+        src/GestorVideos.cpp
+        src/GestorVideos.h)
 
 
 qt_add_qml_module(appIVIVI
