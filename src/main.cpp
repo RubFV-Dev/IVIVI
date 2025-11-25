@@ -1,5 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QMediaPlayer>
+#include <QAudioOutput>
 
 int main(int argc, char *argv[])
 {
