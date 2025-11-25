@@ -13,17 +13,27 @@ qt_add_executable(appIVIVI src/main.cpp
         src/GestorVideos.cpp
         src/GestorVideos.h)
 
+set_source_files_properties(qml/Tema.qml
+        PROPERTIES QT_QML_SINGLETON_TYPE true
+)
+
 
 qt_add_qml_module(appIVIVI
         URI "IVIVI"
         VERSION 1.0
-        RESOURCE_PREFIX "/"
+       RESOURCE_PREFIX "/"
         QML_FILES #-->
         qml/Main.qml
+        qml/Tema.qml
+        qml/components/VideoTarjeta.qml
+        qml/pages/VideosPage.qml
+        qml/pages/HomePage.qml
+        qml/pages/ReproductorPage.qml
 
         RESOURCES #-->
 
 )
+
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
