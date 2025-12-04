@@ -21,6 +21,10 @@ ApplicationWindow {
 
     property bool modoCine: false
 
+    GestorVideos {
+        id: gestorGlobal
+    }
+
     function cambiarPagina(rutaArchivo) {
         stackView.replace(rutaArchivo);
     }
@@ -112,6 +116,13 @@ ApplicationWindow {
                 to: 0; duration: 200
             }
         }
+
+        popEnter: Transition {
+            PropertyAnimation { property: "opacity"; from: 0; to: 1; duration: 200 }
+        }
+        popExit: Transition {
+            PropertyAnimation { property: "opacity"; from: 1; to: 0; duration: 200 }
+        }
         onDepthChanged: {
             if (depth === 1) {
                 modoCine = false
@@ -129,12 +140,11 @@ ApplicationWindow {
         function onVideoSeleccionado(rutaVideo) {
             console.log("Main recibió solicitud de video: " + rutaVideo)
 
-            // a) Ocultamos el menú
+            var urlCompleta = gestorGlobal.obtenerUrlCompleta(rutaVideo)
+
             modoCine = true
 
-            // b) Cargamos la página del reproductor (Simulada aquí con un componente interno)
-            // Nota: Pasamos la rutaVideo como propiedad
-            cambiarPagina("pages/ReproductorPage.qml")
+            stackView.push("pages/ReproductorPage.qml", {"videoSource" : urlCompleta})
         }
 
     }

@@ -10,11 +10,6 @@ Page {
 
     signal videoSeleccionado(string rutaVideo)
 
-    GestorVideos {
-        id: gestorBackend
-    }
-
-
     ListModel {
         id: modeloVideos
         // Al principio está vacío. Lo llenaremos con C++
@@ -23,7 +18,7 @@ Page {
     function cargarVideos() {
         modeloVideos.clear() // Limpiamos por si acaso
 
-        var lista = gestorBackend.obtenerVideos()
+        var lista = gestorGlobal.obtenerVideos()
 
         for (var i = 0; i < lista.length; i++) {
 
@@ -146,7 +141,7 @@ Page {
         nameFilters : ["Video Files (*.mp4 *.avi *.mov *.webm)"]
 
         onAccepted: {
-            gestorBackend.importarVideo(selectedFile)
+            gestorGlobal.importarVideo(selectedFile)
             cargarVideos()
         }
     }
