@@ -21,10 +21,12 @@ ApplicationWindow {
 
     property bool modoCine: false
 
-    GestorVideos {
+
+    Sistema {
         id: gestorGlobal
     }
 
+    property bool haySesion: gestorGlobal.nombreUsuarioActual !== ""
     function cambiarPagina(rutaArchivo) {
         stackView.replace(rutaArchivo);
     }
@@ -33,7 +35,7 @@ ApplicationWindow {
 
         id: menuPrincipal
 
-        visible: !modoCine
+        visible: !modoCine && haySesion
 
         height: visible ? 55 : 0
 
@@ -85,7 +87,7 @@ ApplicationWindow {
 
         // Carga la página inicial.
         // IMPORTANTE: La ruta es relativa al módulo QML
-        initialItem: "pages/HomePage.qml"
+        initialItem: "pages/LoginPage.qml"
 
         // Animación de transición (opcional, queda muy pro)
         pushEnter: Transition {

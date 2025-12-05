@@ -8,6 +8,9 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
+    app.setOrganizationName("UAA");
+    app.setApplicationName("IVIVI");
+
     QQmlApplicationEngine engine;
     QObject::connect(
         &engine,
