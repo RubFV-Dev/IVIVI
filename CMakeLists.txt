@@ -9,9 +9,12 @@ find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2 Multimedia)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
-qt_add_executable(appIVIVI src/main.cpp
-        src/GestorVideos.cpp
-        src/GestorVideos.h)
+qt_add_executable(appIVIVI src/main.cpp src/Sistema.cpp
+        src/Sistema.h
+        src/Usuario.cpp
+        src/Usuario.h
+        src/Video.cpp
+        src/Video.h)
 
 set_source_files_properties(qml/Tema.qml
         PROPERTIES QT_QML_SINGLETON_TYPE true
@@ -29,6 +32,7 @@ qt_add_qml_module(appIVIVI
         qml/pages/VideosPage.qml
         qml/pages/HomePage.qml
         qml/pages/ReproductorPage.qml
+        qml/pages/LoginPage.qml
 
         RESOURCES #-->
 
