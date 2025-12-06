@@ -26,20 +26,24 @@ public:
 
     [[nodiscard]] QString getNombreUsuarioActual() const;
 
-    Q_INVOKABLE [[nodiscard]] bool importarVideo(const QUrl&) const;
+    Q_INVOKABLE [[nodiscard]] bool importarVideo(const QUrl&);
     Q_INVOKABLE [[nodiscard]] QVariantList getVideosUsuario() const;
     Q_INVOKABLE static QUrl obtenerUrlCompleta(const QString&);
     Q_INVOKABLE [[nodiscard]] QString obtenerRutaDirDatos() const;
 
     // <| Archivos de texto |>
-    Q_INVOKABLE bool generarReporteVideos() const;
+    Q_INVOKABLE [[nodiscard]] bool generarReporteVideos() const;
     void registrarEnBitacora(const QString&) const;
 
     signals:
     void usuarioCambiado();
 private:
     QList<Usuario> usuariosList;
-    Usuario *usuarioActual = nullptr;
+
+    int indexUsuarioActual = -1;
+
+    Usuario* getUsuarioActual();
+    [[nodiscard]] const Usuario* getUsuarioActual() const;
 
     QDir dirDatos;
     void inicializarDirDatos();

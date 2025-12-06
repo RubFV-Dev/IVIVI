@@ -1,15 +1,16 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QMediaPlayer>
-#include <QAudioOutput>
+#include <QQuickStyle>
 
 int main(int argc, char *argv[])
 {
 
-    QGuiApplication app(argc, argv);
+    const QGuiApplication app(argc, argv);
 
-    app.setOrganizationName("UAA");
-    app.setApplicationName("IVIVI");
+    QQuickStyle::setStyle("Basic");
+
+    QGuiApplication::setOrganizationName("UAA");
+    QGuiApplication::setApplicationName("IVIVI");
 
     QQmlApplicationEngine engine;
     QObject::connect(
@@ -20,5 +21,5 @@ int main(int argc, char *argv[])
         Qt::QueuedConnection);
     engine.loadFromModule("IVIVI", "Main");
 
-    return app.exec();
+    return QGuiApplication::exec();
 }
