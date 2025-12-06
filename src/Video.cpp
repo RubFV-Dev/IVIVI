@@ -14,7 +14,7 @@ QString Video::getFormato() const {return formatoVideo;}
 qint64 Video::getTamanoBytes() const {return tamanoBytes;}
 
 QDataStream &operator<<(QDataStream &out, const Video &v) {
-    out << v.tituloVideo << v.tituloVideo << v.formatoVideo << v.tamanoBytes;
+    out << v.tituloVideo << v.rutaVideos << v.formatoVideo << v.tamanoBytes;
     return out;
 }
 

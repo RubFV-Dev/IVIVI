@@ -53,9 +53,9 @@ bool Sistema::registrarUsuario(const QString &nombre, const QString &password) {
 }
 
 bool Sistema::iniciarSesion(const QString & nombre, const QString & password) {
-    for (auto & i : usuariosList) {
-        if (i.getNombre() == nombre && i.validarPassword(password)) {
-            usuarioActual = &i;
+    for (int i = 0; i < usuariosList.size(); ++i) {
+        if (usuariosList[i].getNombre() == nombre && usuariosList[i].validarPassword(password)) {
+            indexUsuarioActual = i;
 
             qDebug() << "Sesion iniciada";
             registrarEnBitacora("Inicio de sesión correcta");
@@ -63,6 +63,7 @@ bool Sistema::iniciarSesion(const QString & nombre, const QString & password) {
             return true;
         }
     }
+
     qDebug() << "Credenciales incorrectas";
     registrarEnBitacora("Inicio de sesión incorrecta, Nombre:" + nombre + "Contraseña: " + password);
     return false;
@@ -70,18 +71,18 @@ bool Sistema::iniciarSesion(const QString & nombre, const QString & password) {
 
 void Sistema::cerrarSesion() {
     registrarEnBitacora("Sesion cerrada");
-    usuarioActual = nullptr;
+    indexUsuarioActual = -1;
     qDebug() << "Sesion cerrada";
     emit usuarioCambiado();
 }
 
 QString Sistema::getNombreUsuarioActual() const{
-    if (usuarioActual) return usuarioActual->getNombre();
+    if (getUsuarioActual()) return getUsuarioActual()->getNombre();
     return "";
 }
 
-bool Sistema::importarVideo(const QUrl &url) const {
-    if (!usuarioActual) {
+bool Sistema::importarVideo(const QUrl &url) {
+    if (!getUsuarioActual()) {
         qDebug() << "No hay sesion activa";
         return false;
     }
@@ -95,21 +96,21 @@ bool Sistema::importarVideo(const QUrl &url) const {
 
     const Video nuevoVideo(info.baseName(), rutaAbsoluta, info.suffix(), info.size());
 
-    usuarioActual->agregarVideo(nuevoVideo);
+    getUsuarioActual()->agregarVideo(nuevoVideo);
 
     guardarBaseDeDatos();
 
     registrarEnBitacora("Se importe video: " + nuevoVideo.getTitulo());
-    qDebug() << "Video importado a la biblioteca de: " << usuarioActual->getNombre();
+    qDebug() << "Video importado a la biblioteca de: " << getUsuarioActual()->getNombre();
     return true;
 }
 
 QVariantList Sistema::getVideosUsuario() const {
     QVariantList listaParaQML;
 
-    if (!usuarioActual) return listaParaQML;
+    if (!getUsuarioActual()) return listaParaQML;
 
-    const auto &biblioteca = usuarioActual->getVideos();
+    const auto &biblioteca = getUsuarioActual()->getVideos();
 
     for (const auto &video : biblioteca) {
         QVariantMap mapaVideo;
@@ -117,7 +118,7 @@ QVariantList Sistema::getVideosUsuario() const {
         mapaVideo["ruta"] = video.getRuta();
         mapaVideo["formato"] = video.getFormato();
 
-        const double mb = video.getTamanoBytes() / (1024.0 * 1024.0);
+        const double mb = static_cast<double>(video.getTamanoBytes()) / (1024.0 * 1024.0);
         mapaVideo["peso"] = QString::number(mb, 'f', 1)+ "MiB" ;
 
         listaParaQML.append(mapaVideo);
@@ -175,10 +176,10 @@ void Sistema::cargarBaseDeDatos() {
 }
 
 bool Sistema::generarReporteVideos() const {
-    if (!usuarioActual) return false;
+    if (!getUsuarioActual()) return false;
 
     const QString ruta = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    QFile archivo(ruta + "/Reporte_IVIVI_" + usuarioActual->getNombre() + ".txt");
+    QFile archivo(ruta + "/Reporte_IVIVI_" + getUsuarioActual()->getNombre() + ".txt");
 
     if (archivo.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream out(&archivo);
@@ -186,12 +187,12 @@ bool Sistema::generarReporteVideos() const {
         out << "~ * ~ * ~ * ~ * ~ * ~ * ~ * ~ * ~ * ~ * ~ * ~\n";
         out << "|        Reporte de videos - IVIVI          |\n ";
         out << "~ * ~ * ~ * ~ * ~ * ~ * ~ * ~ * ~ * ~ * ~ * ~\n";
-        out << "Usario: " << usuarioActual->getNombre() << "\n";
+        out << "Usario: " << getUsuarioActual()->getNombre() << "\n";
         out << "Fecha: " << QDateTime::currentDateTime().toString() << "\n";
         out << "<> <> <> <> <> <> <> <> <> <> <> <> <> <> <>\n";
 
 
-        const QList<Video> &lista = usuarioActual->getVideos();
+        const QList<Video> &lista = getUsuarioActual()->getVideos();
         qint64 pesoTotal = 0;
 
         out << "Videos Registrados: \n";
@@ -219,12 +220,26 @@ void Sistema::registrarEnBitacora(const QString &accion) const {
     if (archivo.open(QIODevice::Append | QIODevice::Text)) {
         QTextStream out(&archivo);
 
-        const QString usuario = (usuarioActual) ? usuarioActual->getNombre() : "SISTEMA";
+        const QString usuario = (getUsuarioActual()) ? getUsuarioActual()->getNombre() : "SISTEMA";
         const QString tiempo = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
 
         out << "[" << tiempo << "] [" << usuario << "]: " << accion << "\n";
         archivo.close();
     }
+}
+
+Usuario* Sistema::getUsuarioActual() {
+    if (indexUsuarioActual >= 0 && indexUsuarioActual < usuariosList.size()) {
+        return &usuariosList[indexUsuarioActual];
+    }
+    return nullptr;
+}
+
+const Usuario* Sistema::getUsuarioActual() const {
+    if (indexUsuarioActual >= 0 && indexUsuarioActual < usuariosList.size()) {
+        return &usuariosList[indexUsuarioActual];
+    }
+    return nullptr;
 }
 
 
