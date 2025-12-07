@@ -105,6 +105,19 @@ bool Sistema::importarVideo(const QUrl &url) {
     return true;
 }
 
+bool Sistema::eliminarVideo(const QString &ruta) {
+    if (!getUsuarioActual()) return false;
+
+    if (getUsuarioActual()->eliminarVideo(ruta)) {
+        qDebug() << "Video eliminado" << ruta;
+        registrarEnBitacora("Se elimino el video" + ruta);
+
+        guardarBaseDeDatos();
+        return true;
+    }
+    return false;
+}
+
 QVariantList Sistema::getVideosUsuario() const {
     QVariantList listaParaQML;
 

@@ -12,29 +12,31 @@ Page {
 
     ListModel {
         id: modeloVideos
-        // Al principio está vacío. Lo llenaremos con C++
     }
 
     function cargarVideos() {
         modeloVideos.clear() // Limpiamos por si acaso
 
-        var lista = gestorGlobal.obtenerVideos()
+        var lista = gestorGlobal.getVideosUsuario()
 
         for (var i = 0; i < lista.length; i++) {
 
             modeloVideos.append({
-                "nombreArchivo": lista[i],
-                "esBotoAgregar":false
+                "tituloVideo": lista[i].titulo,
+                "rutaVideo": lista[i].ruta,
+                "pesoVideo": lista[i].peso,
+                "esBotonAgregar": false
             })
         }
 
         modeloVideos.append({
-            "nombreArchivo": "",
-            "esBotonAgregar": true   // Marcamos que este es el botón
+            "tituloVideo": "",
+            "rutaVideo": "",
+            "pesoVideo": "",
+            "esBotonAgregar": true
         })
     }
 
-    // Cargar automáticamente al abrir la página
     Component.onCompleted: cargarVideos()
 
 
@@ -43,23 +45,16 @@ Page {
         id: grid
         anchors.fill: parent
         anchors.margins: 25
-
-        // Configuración de la celda (Tamaño tarjeta + espacio)
         cellWidth: 180
         cellHeight: 260
-
-        clip: true // Para que el scroll no se salga del cuadro
-
-        // Conectamos con el modelo
+        clip: true
         model: modeloVideos
 
-        // El delegado, es decir, qué cosas va a estar en la Grilla, que objeto o item
-        // En este caso en un delegado inteligente, ya que recibe Item, dandole la capacidad de tener diferentes cosas
         delegate: Item {
             width: grid.cellWidth
             height: grid.cellHeight
 
-            // Marco de componentes
+
             Loader{
                 anchors.centerIn: parent
 
@@ -69,15 +64,23 @@ Page {
                 sourceComponent: model.esBotonAgregar ? addBoton : videoTarjetas
             }
 
-            // Tarjeta de los videos
             Component{
                 id: videoTarjetas
                 VideoTarjeta {
-                    titulo: model.nombreArchivo
+                    titulo: model.tituloVideo
 
-                    onClickeado: {
-                        console.log("Solicitando video: " + titulo)
-                        paginaVideos.videoSeleccionado(titulo)
+                    onClicked: {
+                        console.log("Solicitando video ruta: " + model.rutaVideo)
+                        paginaVideos.videoSeleccionado(model.rutaVideo)
+                    }
+
+                    onEliminarClicked: {
+                        console.log("Eliminado: " + model.rutaVideo)
+                        var borrado = gestorGlobal.eliminarVideo(model.rutaVideo)
+
+                        if (borrado){
+                            cargarVideos()
+                        }
                     }
                 }
             }

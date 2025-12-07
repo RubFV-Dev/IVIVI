@@ -27,6 +27,7 @@ public:
     [[nodiscard]] QString getNombreUsuarioActual() const;
 
     Q_INVOKABLE [[nodiscard]] bool importarVideo(const QUrl&);
+    Q_INVOKABLE [[nodiscard]] bool eliminarVideo(const QString  & ruta);
     Q_INVOKABLE [[nodiscard]] QVariantList getVideosUsuario() const;
     Q_INVOKABLE static QUrl obtenerUrlCompleta(const QString&);
     Q_INVOKABLE [[nodiscard]] QString obtenerRutaDirDatos() const;

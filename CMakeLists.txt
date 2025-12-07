@@ -31,6 +31,7 @@ qt_add_qml_module(appIVIVI
         qml/components/VideoTarjeta.qml
         qml/pages/VideosPage.qml
         qml/pages/HomePage.qml
+        qml/pages/PerfilPage.qml
         qml/pages/ReproductorPage.qml
         qml/pages/LoginPage.qml
 

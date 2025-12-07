@@ -8,7 +8,8 @@ Item {
 
     property string titulo: "Desconocido"
 
-    signal clickeado()
+    signal clicked()
+    signal eliminarClicked()
 
 
     Rectangle {
@@ -44,11 +45,41 @@ Item {
         elide: Text.ElideRight
     }
 
+    Rectangle {
+        id: btnBasura
+        width: 30
+        height: 30
+        radius: 15
+        color: Tema.principalII
+
+        // Lo colocamos en la esquina superior derecha
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.margins: 5
+        z: 10 // Para que quede encima de all
+
+        Text {
+            anchors.centerIn: parent
+            text: "X" // O usa un icono si tienes fuente de iconos
+            color: Tema.botones
+            font.bold: true
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            onClicked: {
+                // Emitimos la señal para que VideosPage se encargue
+                root.eliminarClicked()
+            }
+        }
+    }
+
     MouseArea {
         id: areaMouse
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
-        onClicked: root.clickeado()
+        onClicked: root.clicked()
     }
 }
