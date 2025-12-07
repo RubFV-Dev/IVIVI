@@ -10,12 +10,12 @@ Page {
     ColumnLayout{
         anchors.centerIn: parent
         width: 300
-        spacing: 20
+        spacing: 21
 
         Text {
             text: "IVIVI LOGIN"
             color: Tema.principalI
-            font.pixelSize: 40
+            font.pixelSize: 50
             font.bold: true
             Layout.alignment: Qt.AlignHCenter
         }
@@ -23,8 +23,10 @@ Page {
         TextField{
             id: userInput
             placeholderText: "Usuario"
+            placeholderTextColor: Tema.fondo
             Layout.fillWidth: true
-            font.pixelSize: 16
+            font.pixelSize: 25
+            color :Tema.texto
             background : Rectangle {
                 color: Tema.apartados
                 radius: 5
@@ -34,11 +36,13 @@ Page {
         TextField {
             id: passInput
             placeholderText: "Contraseña"
+            placeholderTextColor: Tema.fondo
             echoMode: TextInput.Password // Oculta el texto
             Layout.fillWidth: true
-            font.pixelSize: 16
+            font.pixelSize: 25
+            color :Tema.texto
             background: Rectangle {
-                color: "white"
+                color: Tema.apartados
                 radius: 5
             }
         }
@@ -54,6 +58,7 @@ Page {
                 text: parent.text
                 color: "white"
                 font.bold: true
+                font.pixelSize: 20
                 horizontalAlignment: Text.AlignHCenter
             }
             onClicked: {
@@ -73,13 +78,14 @@ Page {
             Layout.fillWidth: true
             background: Rectangle {
                 color: "transparent"
-                border.color: Tema.principalI
+                border.color: parent.down ? Tema.principalII : Tema.principalI
                 border.width: 1
                 radius: 5
             }
             contentItem: Text {
                 text: parent.text
                 color: Tema.principalI
+                font.pixelSize: 20
                 horizontalAlignment: Text.AlignHCenter
             }
             onClicked: {

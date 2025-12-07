@@ -11,6 +11,17 @@ void Usuario::agregarVideo(const Video& video) {
     videosUsuario.append(video);
 }
 
+bool Usuario::eliminarVideo(const QString &ruta) {
+    for (int i = 0; i < videosUsuario.size(); i++) {
+        if (videosUsuario[i].getRuta() == ruta) {
+            videosUsuario.removeAt(i);
+            return true;
+        }
+    }
+    return false;
+}
+
+
 bool Usuario::validarPassword(const QString& password) const {return password == passwordUsuario;}
 
 QString Usuario::getNombre() const {return nombreUsuario;}

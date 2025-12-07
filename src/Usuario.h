@@ -20,12 +20,14 @@ public:
     //<| Agregar videos a las lista |>
     void agregarVideo(const Video&);
 
+    bool eliminarVideo(const QString&);
+
     // <| Validar contraseña
-    bool validarPassword(const QString& ) const;
+    [[nodiscard]] bool validarPassword(const QString& ) const;
 
     //<| Getters |>
-    QString getNombre() const;
-    QList<Video> getVideos() const;
+    [[nodiscard]] QString getNombre() const;
+    [[nodiscard]] QList<Video> getVideos() const;
 
     // <| Sobrecargas para binarios |>
     friend QDataStream &operator<<(QDataStream&, const Usuario&);
